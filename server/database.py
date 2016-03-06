@@ -26,10 +26,6 @@ class Database:
         conn = self.get_conn()
         conn.execute('DELETE FROM requests WHERE type=? and name=? and date=?', (request['type'], request['name'], request['date']))
 
-    def add_movie(self, movie):
+    def add_request(self, item):
         conn = self.get_conn()
-        conn.execute('INSERT INTO requests VALUES (?,?,?)', ('movie', movie['name'], movie['date']))
-
-    def add_tv_show(self, tv_show):
-        conn = self.get_conn()
-        conn.execute('INSERT INTO requests VALUES (?,?,?)', ('tv_show', tv_show['name'], tv_show['date']))
+        conn.execute('INSERT INTO requests VALUES (?,?,?)', (item['type'], item['name'], item['date']))

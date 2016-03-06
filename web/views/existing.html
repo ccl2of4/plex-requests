@@ -1,0 +1,12 @@
+<div ng-controller="EditController">
+  <h2>Existing Requests <i ng-show="loading" class="fa fa-refresh fa-pulse"></i> </h2>
+
+  <div class="list-group">
+    <div class="list-group-item" ng-repeat="request in requests">
+      <h4><a href="javascript:void(0);" ng-click="show(request)">{{ request.name }}</a></h4>
+      <h5>{{ request.date | date : 'yyyy' }}</h5>
+      <button class="btn btn-success" ng-click="markComplete(request)">Mark Complete</button>
+      <button class="btn btn-danger" ng-click="markComplete(request)">Delete</button>
+    </a>
+  </div>
+</div>

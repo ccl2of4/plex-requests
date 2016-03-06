@@ -1,4 +1,5 @@
-function RequestController($rootScope, $scope, $http, $q) {
+plexRequests.controller('RequestController', ['$rootScope', '$scope', '$q', 'searchService', 'requestService',
+    function RequestController($rootScope, $scope, $q, searchService, requestService) {
 
   $scope.searchtype = 'movie';
 
@@ -11,17 +12,18 @@ function RequestController($rootScope, $scope, $http, $q) {
   });
 
   $rootScope.$on('show_item', function(event, request) {
+    console.log(request.type);
     $scope.searchtype = request.type;
     $scope.query = request.name;
   });
 
+  $scope.setSearchType = function(type) {
+    $scope.searchtype = type;
+  }
+
   $scope.add = function(searchresult) {
     $scope.loading = true;
-    $http({
-      url : postUrl(),
-      method : 'POST',
-      data : postParams(searchresult),
-    }).then(function(response){
+    requestService.request_item(searchresult, function() {
       $scope.loading = false;
       $rootScope.$emit('refresh_needed');
     });
@@ -39,13 +41,22 @@ function RequestController($rootScope, $scope, $http, $q) {
 
   search = function(query) {
     $scope.loading = true;
-    $http({
-      url : getUrl(),
-      method : 'GET',
-      params : {query : query},
-      timeout : $scope.canceller.promise
-    }).then(completeRequest);
+    if ($scope.searchtype === 'movie') {
+      searchMovies(query);
+    } else {
+      searchTV(query);
+    }
   },
+
+  searchTV = function(query) {
+    searchService.tvshows(query, $scope.canceller,
+      completeRequest);
+  },
+
+  searchMovies = function(query) {
+    searchService.movies(query, $scope.canceller,
+      completeRequest);
+  }
 
   postParams = function(searchresult) {
     return $scope.searchtype == 'movie' ?
@@ -53,22 +64,9 @@ function RequestController($rootScope, $scope, $http, $q) {
       { tv_show : searchresult };
   },
 
-  postUrl = function() {
-    return $scope.searchtype === 'movie' ? 'http://otis.ddns.net:5000/movierequest'
-      : 'http://otis.ddns.net:5000/tvrequest';
-  },
-
-  getUrl = function() {
-    return $scope.searchtype === 'movie' ? 'http://otis.ddns.net:5000/moviesearch'
-      : 'http://otis.ddns.net:5000/tvsearch';
-  },
-
-  completeRequest = function(response) {
-    $scope.searchresults = response.data.movies;
-    if(!$scope.searchresults){
-      $scope.searchresults = response.data.tv_shows;
-    }
+  completeRequest = function(searchresults) {
     $scope.loading = false;
+    $scope.searchresults = searchresults;
   },
 
   cancelRequest = function() {
@@ -79,5 +77,4 @@ function RequestController($rootScope, $scope, $http, $q) {
     $scope.loading = false;
     $scope.canceller = $q.defer();
   };
-
-}
+}]);

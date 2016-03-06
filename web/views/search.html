@@ -1,0 +1,32 @@
+<div ng-controller="RequestController">
+
+  <h2>Request <i ng-show="loading" class="fa fa-refresh fa-pulse"></i></h2>
+  <ul class="nav nav-tabs">
+    <li role="presentation" ng-click="setSearchType('movie')" ng-class="{active : searchtype === 'movie'}"><a href="javascript:void(0)">Movies</a></li>
+    <li role="presentation" ng-click="setSearchType('tv_show')" ng-class="{active : searchtype === 'tv_show'}"><a href="javascript:void(0)">TV Shows</a></li>
+  </ul>
+
+  <input type="text" class="form-control" ng-model="query" placeholder="Search for...">
+
+  <div>
+    <div class="list-group">
+      <li class="list-group-item" ng-repeat="searchresult in searchresults">
+        <h4>{{ searchresult.name }}</h4>
+        <h5>{{ searchresult.date | date : 'yyyy' }}</h5>
+        <div class="media">
+          <div ng-if="searchresult.poster_path" class="media-left media-middle">
+            <img class="media-object img-thumbnail" ng-src="{{ searchresult.poster_path }}"/>
+          </div>
+          <div class="media-body">
+            <p class="list-group-item-text">
+              {{ searchresult.summary }}
+            </p>
+          </div>
+          <div style="text-align:right; padding:10px">
+                <button type="submit" class="btn btn-success" ng-click="add(searchresult)">Add</button>
+          </div>
+        </div>
+      </li>
+    </div>
+  </div>
+</div>
