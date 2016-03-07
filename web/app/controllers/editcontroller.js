@@ -17,13 +17,13 @@ plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'req
     });
   };
 
-  $rootScope.$on('refresh_needed', function(){
-    $scope.refresh_requests()
-  });
-
   $scope.show = function(request) {
     $rootScope.$emit('show_item', request);
   };
+
+  $rootScope.$on('refresh_needed', function(){
+    $scope.refresh_requests()
+  });
 
   $scope.refresh_requests();
 

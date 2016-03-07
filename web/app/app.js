@@ -8,10 +8,10 @@ var plexRequests = angular.module('plexRequests', ['environment']).
       },
       vars: {
         development: {
-          apiBaseUrl: 'http://otis.ddns.net',
+          apiBaseUrl: 'http://localhost:5000',
         },
         production: {
-          apiBaseUrl: 'http://localhost',
+          apiBaseUrl: 'http://otis.ddns.net:5000',
         }
       }
     });
@@ -19,4 +19,4 @@ var plexRequests = angular.module('plexRequests', ['environment']).
   // run the environment check, so the comprobation is made
   // before controllers and services are built
   envServiceProvider.check();
-  });
+});
