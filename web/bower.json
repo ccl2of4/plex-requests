@@ -7,7 +7,8 @@
     "angular-mocks": "1.4.x",
     "jquery": "2.2.0",
     "bootstrap": "3.3.6",
-    "angular-resource" : "1.4.x",
-    "components-font-awesome" : "4.5.0"
+    "angular-resource": "1.4.x",
+    "components-font-awesome": "4.5.0",
+    "angular-environment": "1.0.3"
   }
 }
