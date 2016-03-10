@@ -5,8 +5,28 @@
     <div class="list-group-item" ng-repeat="request in requests">
       <h4><a href="javascript:void(0);" ng-click="show(request)">{{ request.name }}</a></h4>
       <h5>{{ request.date | date : 'yyyy' }}</h5>
-      <button class="btn btn-primary" ng-click="markComplete(request)">Mark Complete</button>
-      <button class="btn btn-default" ng-click="markComplete(request)">Delete</button>
+
+      <div>
+        <button class="btn btn-primary" ng-click="markComplete(request)">Mark Complete</button>
+        <button class="btn btn-default" ng-click="markComplete(request)">Delete</button>
+      </div><br/>
+
+      <div ng-if="request.comments.length" class="well">
+        <p ng-repeat="comment in request.comments">
+          {{ comment.content }}
+          <button class="btn btn-danger pull-right btn-sm" ng-click="deleteComment(request, comment)">X</button>
+        </p>
+      </div>
+
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="Write a comment..."
+          ng-model="newComment"
+          ng-keypress="($event.which === 13)?addComment(request, newComment):0"/>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-click="addComment(request, newComment)">+</button>
+        </span>
+      </div><br/>
+
     </a>
   </div>
 </div>

@@ -21,8 +21,9 @@ plexRequests.factory('requestService', ['$http', 'envService',
   };
 
   function delete_request(item, completion) {
+    console.log(item);
     $http({
-      url : getUrl('/requests'),
+      url : getUrl('/requests/' + item['request_id']),
       method : 'DELETE',
       data : {item : item},
       headers: {'Content-Type': 'application/json' }

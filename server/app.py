@@ -15,6 +15,9 @@ tmdb.API_KEY = 'a550478f541c18be96e8019858fb837f'
 app = Flask(__name__, static_folder='../web')
 database = Database()
 
+
+# Web
+
 @app.route('/', methods=['get'])
 def index():
     return send_file('../web/views/index.html')
@@ -24,21 +27,39 @@ def old_index():
     return redirect(url_for('index'))
 
 
+# Requests
+
 @app.route('/requests', methods=['get'])
 def get_requests():
     return json.dumps(database.get_requests())
-
-@app.route('/requests', methods=['delete'])
-def delete_request():
-    item = request.get_json()['item']
-    database.delete_request(item)
-    return ('', 204)
 
 @app.route('/requests', methods=['post'])
 def add_request():
     item = request.get_json()['item']
     database.add_request(item)
     return ('', 201)
+
+@app.route('/requests/<request_id>', methods=['delete'])
+def delete_request(request_id):
+    database.delete_request(request_id)
+    return ('', 204)
+
+
+# Comments
+
+@app.route('/requests/<request_id>/comments', methods=['post'])
+def add_comment(request_id):
+    comment = request.get_json()['comment']
+    database.add_comment(request_id, comment)
+    return ('', 201)
+
+@app.route('/requests/<request_id>/comments/<comment_id>', methods=['delete'])
+def delete_comment(request_id, comment_id):
+    database.delete_comment(request_id, comment_id)
+    return ('', 204)
+
+
+#Search
 
 @app.route('/moviesearch', methods=['get'])
 def search_movies():

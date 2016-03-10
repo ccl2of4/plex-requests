@@ -1,11 +1,11 @@
-plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'requestService',
-    function EditController($rootScope, $scope, $http, requestService) {
+plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'requestService', 'commentService',
+    function EditController($rootScope, $scope, $http, requestService, commentService) {
 
   $scope.markComplete = function(request) {
     $scope.loading = true;
     requestService.delete_request(request, function() {
       $scope.loading = false;
-      $scope.refresh_requests()
+      $scope.refresh_requests();
     });
   };
 
@@ -14,6 +14,22 @@ plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'req
     requestService.get_all(function(requests) {
       $scope.requests = requests;
       $scope.loading = false;
+    });
+  };
+
+  $scope.addComment = function(request, comment) {
+    $scope.loading = true;
+    commentService.addComment(request, comment, function() {
+      $scope.loading = false;
+      $scope.refresh_requests();
+    });
+  };
+
+  $scope.deleteComment = function(request, comment) {
+    $scope.loading = true;
+    commentService.deleteComment(request, comment, function() {
+      $scope.loading = false;
+      $scope.refresh_requests();
     });
   };
 
