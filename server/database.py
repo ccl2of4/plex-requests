@@ -38,8 +38,8 @@ class Database:
 
     def delete_request(self, request_id):
         conn = self.get_conn()
-        conn.execute('DELETE FROM requests WHERE request_id=?', request_id )
-        conn.execute('DELETE FROM comments WHERE request_id=?', request_id )
+        conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,) )
+        conn.execute('DELETE FROM comments WHERE request_id=?', (request_id,) )
 
     def add_request(self, item):
         conn = self.get_conn()
