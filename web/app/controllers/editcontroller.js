@@ -18,6 +18,10 @@ plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'req
   };
 
   $scope.addComment = function(request, comment) {
+    if (!comment) {
+      return;
+    }
+
     $scope.loading = true;
     commentService.addComment(request, comment, function() {
       $scope.loading = false;
