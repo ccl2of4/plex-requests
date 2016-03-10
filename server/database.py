@@ -30,7 +30,7 @@ class Database:
         colname = [ d[0] for d in query.description ]
         result_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
         for request in result_list:
-            query = conn.execute('SELECT * FROM comments where request_id=? ORDER BY date ASC', str(request['request_id']))
+            query = conn.execute('SELECT * FROM comments where request_id=? ORDER BY date ASC', (str(request['request_id']),))
             colname = [ d[0] for d in query.description ]
             comment_list = [ dict(zip(colname, r)) for r in query.fetchall() ]
             request['comments'] = comment_list
