@@ -21,6 +21,9 @@ database = Database()
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
+    print(path)
+    if (path != ''):
+        return redirect('/')
     return send_file('../web/index.html')
 
 
