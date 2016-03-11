@@ -12,7 +12,6 @@ plexRequests.controller('RequestController', ['$rootScope', '$scope', '$q', 'sea
   });
 
   $rootScope.$on('show_item', function(event, request) {
-    console.log(request.type);
     $scope.searchtype = request.type;
     $scope.query = request.name;
   });
