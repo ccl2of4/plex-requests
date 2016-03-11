@@ -3,7 +3,7 @@
 	<head>
 		<title>Plex Requests</title>
 
-		<base href="web/app/"/>
+		<base href="web/"/>
 
 		<script src="bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -16,12 +16,12 @@
 		<script src="bower_components/angular-environment/dist/angular-environment.min.js"></script>
 		<script src="bower_components/angular-resource/angular-resource.min.js"></script>
 
-		<script src="app.js"></script>
-		<script src="services/searchservice.js"></script>
-		<script src="services/requestservice.js"></script>
-		<script src="services/commentservice.js"></script>
-		<script src="controllers/requestcontroller.js"></script>
-		<script src="controllers/editcontroller.js"></script>
+		<script src="app/app.js"></script>
+		<script src="app/services/searchservice.js"></script>
+		<script src="app/services/requestservice.js"></script>
+		<script src="app/services/commentservice.js"></script>
+		<script src="app/controllers/requestcontroller.js"></script>
+		<script src="app/controllers/editcontroller.js"></script>
 
 	</head>
 
@@ -36,11 +36,11 @@
 			<div class="row">
 
 				<div class="col-md-6">
-					<ng-include src="'views/search.html'"></ng-include>
+					<ng-include src="'app/views/search.html'"></ng-include>
 				</div>
 
 				<div class="col-md-6">
-					<ng-include src="'views/existing.html'"></ng-include>
+					<ng-include src="'app/views/existing.html'"></ng-include>
 				</div>
 
 			</div>
