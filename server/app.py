@@ -18,13 +18,10 @@ database = Database()
 
 # Web
 
-@app.route('/', methods=['get'])
-def index():
-    return send_file('../web/views/index.html')
-
-@app.route('/web/index.html', methods=['get'])
-def old_index():
-    return redirect(url_for('index'))
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return send_file('../web/index.html')
 
 
 # Requests
