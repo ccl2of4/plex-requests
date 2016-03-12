@@ -1,3 +1,6 @@
+#instance config
+instance/
+
 #sqlite db file
 *.db
 

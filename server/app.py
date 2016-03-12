@@ -12,17 +12,19 @@ from database import Database
 import json
 
 tmdb.API_KEY = 'a550478f541c18be96e8019858fb837f'
-app = Flask(__name__, static_folder='../web')
+app = Flask(__name__, static_folder='../web', instance_relative_config=True)
+app.config.from_pyfile('plex-requests.cfg')
 database = Database()
-
 
 # Web
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
+@app.route('/')
+def index():
     return send_file('../web/index.html')
 
+@app.route('/<path:path>')
+def redirect_to_index(path):
+    return redirect('/')
 
 # Requests
 
@@ -95,4 +97,4 @@ def search_tv():
     return jsonify(res)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', threaded=True)
+    app.run(host='0.0.0.0', threaded=True)
