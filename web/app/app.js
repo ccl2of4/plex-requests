@@ -1,4 +1,4 @@
-var plexRequests = angular.module('plexRequests', ['environment', 'ngResource', 'ngRoute']).
+var plexRequests = angular.module('plexRequests', ['environment']).
   config(function(envServiceProvider) {
   // set the domains and variables for each environment
     envServiceProvider.config({
@@ -19,13 +19,4 @@ var plexRequests = angular.module('plexRequests', ['environment', 'ngResource', 
   // run the environment check, so the comprobation is made
   // before controllers and services are built
   envServiceProvider.check();
-}).
-  config(function($routeProvider, $locationProvider) {
-    $routeProvider
-    .when('/', {
-      templateUrl: 'app/views/main.html',
-    })
-    .otherwise({
-      redirectTo: '/'
-    });
-  });
+});
