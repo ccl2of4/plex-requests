@@ -11,9 +11,9 @@ from urlresolver import resolve_img_url
 from database import Database
 import json
 
-tmdb.API_KEY = 'a550478f541c18be96e8019858fb837f'
 app = Flask(__name__, static_folder='../web', instance_relative_config=True)
 app.config.from_pyfile('plex-requests.cfg')
+tmdb.API_KEY = app.config['API_KEY']
 database = Database()
 
 # Web
