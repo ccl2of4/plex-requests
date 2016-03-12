@@ -1,5 +1,5 @@
 plexRequests.factory('commentService', ['$http', 'envService',
-    function RequestService($http, envService) {
+    function CommentService($http, envService) {
 
   function addComment(request, comment, completion) {
     $http({

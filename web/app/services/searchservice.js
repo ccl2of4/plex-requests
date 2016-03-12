@@ -1,27 +1,35 @@
-plexRequests.factory('searchService', ['$http', 'envService',
-    function SearchService($http, envService) {
+plexRequests.factory('searchService', ['$http', '$q', 'envService',
+    function SearchService($http, $q, envService) {
 
-  function movies(query, canceller, completion) {
+  function movies(query, completion) {
+    canceler = $q.defer();
     $http({
       url : getUrl('/moviesearch'),
       method : 'GET',
       params : {query : query},
-      timeout : canceller.promise
+      timeout : canceler.promise
     }).then(function(data) {
-      completion(data.data.movies);
+      completion(data.data['movies']);
     });
+    return canceler;
   };
 
-  function tvshows(query, canceller, completion) {
+  function tvshows(query, completion) {
+    canceler = $q.defer();
     $http({
       url : getUrl('/tvsearch'),
       method : 'GET',
       params : {query : query},
-      timeout : canceller.promise
+      timeout : canceler.promise
     }).then(function(data) {
-      completion(data.data.tv_shows);
+      completion(data.data['tv_shows']);
     });
+    return canceler;
   };
+
+  function cancel(canceler) {
+    canceler.resolve();
+  }
 
   function getUrl(endpoint) {
     return envService.read('apiBaseUrl') + endpoint;
@@ -29,7 +37,8 @@ plexRequests.factory('searchService', ['$http', 'envService',
 
   return {
     movies : movies,
-    tvshows : tvshows
+    tvshows : tvshows,
+    cancel : cancel
   };
 
 }]);

@@ -1,7 +1,7 @@
 plexRequests.factory('requestService', ['$http', 'envService',
     function RequestService($http, envService) {
 
-  function get_all(completion) {
+  function getAll(completion) {
     $http({
       url : getUrl('/requests'),
       method : 'GET',
@@ -10,7 +10,7 @@ plexRequests.factory('requestService', ['$http', 'envService',
     });
   }
 
-  function request_item(item, completion) {
+  function requestItem(item, completion) {
     $http({
       url : getUrl('/requests'),
       method : 'POST',
@@ -20,8 +20,7 @@ plexRequests.factory('requestService', ['$http', 'envService',
     });
   };
 
-  function delete_request(item, completion) {
-    console.log(item);
+  function deleteRequest(item, completion) {
     $http({
       url : getUrl('/requests/' + item['request_id']),
       method : 'DELETE',
@@ -37,9 +36,9 @@ plexRequests.factory('requestService', ['$http', 'envService',
   };
 
   return {
-    get_all : get_all,
-    request_item : request_item,
-    delete_request : delete_request
+    getAll : getAll,
+    requestItem : requestItem,
+    deleteRequest : deleteRequest
   };
 
 }]);

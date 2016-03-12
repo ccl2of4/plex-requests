@@ -1,23 +1,38 @@
 plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'requestService', 'commentService',
     function EditController($rootScope, $scope, $http, requestService, commentService) {
 
-  $scope.markComplete = function(request) {
-    $scope.loading = true;
-    requestService.delete_request(request, function() {
-      $scope.loading = false;
-      $scope.refresh_requests();
+  (function init() {
+    refreshRequests();
+    $rootScope.$on('refreshNeeded', function(){
+      refreshRequests()
     });
-  };
+  })();
 
-  $scope.refresh_requests = function() {
+  function refreshRequests() {
     $scope.loading = true;
-    requestService.get_all(function(requests) {
+    requestService.getAll(function(requests) {
       $scope.requests = requests;
       $scope.loading = false;
     });
   };
 
-  $scope.addComment = function(request, comment) {
+  function deleteRequest(request) {
+    $scope.loading = true;
+    requestService.deleteRequest(request, function() {
+      $scope.loading = false;
+      $scope.refreshRequests();
+    });
+  };
+
+  function showCommentBox(request) {
+    $scope.commentingRequest = request;
+  };
+
+  function showingCommentBox(request) {
+    return $scope.commentingRequest == request;
+  };
+
+  function addComment(request, comment) {
     if (!comment) {
       return;
     }
@@ -25,26 +40,35 @@ plexRequests.controller('EditController', ['$rootScope', '$scope', '$http', 'req
     $scope.loading = true;
     commentService.addComment(request, comment, function() {
       $scope.loading = false;
-      $scope.refresh_requests();
+      $scope.refreshRequests();
     });
   };
 
-  $scope.deleteComment = function(request, comment) {
+  function addCommentIfEnterKeyPressed($event, request, newComment) {
+    if ($event.which === 13) {
+      addComment(request, newComment);
+    }
+  };
+
+  function deleteComment(request, comment) {
     $scope.loading = true;
     commentService.deleteComment(request, comment, function() {
       $scope.loading = false;
-      $scope.refresh_requests();
+      $scope.refreshRequests();
     });
+  }
+
+  function show(request) {
+    $rootScope.$emit('showItem', request);
   };
 
-  $scope.show = function(request) {
-    $rootScope.$emit('show_item', request);
-  };
-
-  $rootScope.$on('refresh_needed', function(){
-    $scope.refresh_requests()
-  });
-
-  $scope.refresh_requests();
+  $scope.refreshRequests = refreshRequests;
+  $scope.deleteRequest = deleteRequest;
+  $scope.showCommentBox = showCommentBox;
+  $scope.showingCommentBox = showingCommentBox;
+  $scope.addCommentIfEnterKeyPressed = addCommentIfEnterKeyPressed;
+  $scope.addComment = addComment;
+  $scope.deleteComment = deleteComment;
+  $scope.show = show;
 
 }]);

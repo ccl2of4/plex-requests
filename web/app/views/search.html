@@ -2,28 +2,28 @@
 
   <h2>Request <i ng-show="loading" class="fa fa-refresh fa-pulse"></i></h2>
   <ul class="nav nav-tabs">
-    <li role="presentation" ng-click="setSearchType('movie')" ng-class="{active : searchtype === 'movie'}"><a href="javascript:void(0)">Movies</a></li>
-    <li role="presentation" ng-click="setSearchType('tv_show')" ng-class="{active : searchtype === 'tv_show'}"><a href="javascript:void(0)">TV Shows</a></li>
+    <li role="presentation" ng-click="setSearchType('movie')" ng-class="{active : isSearchType('movie')}"><a href="javascript:void(0)">Movies</a></li>
+    <li role="presentation" ng-click="setSearchType('tv')" ng-class="{active : isSearchType('tv_show')}"><a href="javascript:void(0)">TV Shows</a></li>
   </ul>
 
   <input type="text" class="form-control" ng-model="query" placeholder="Search for...">
 
   <div>
     <div class="list-group">
-      <li class="list-group-item" ng-repeat="searchresult in searchresults">
-        <h4>{{ searchresult.name }}</h4>
-        <h5>{{ searchresult.date | date : 'yyyy' }}</h5>
+      <li class="list-group-item" ng-repeat="searchResult in searchResults">
+        <h4>{{ searchResult.name }}</h4>
+        <h5>{{ searchResult.date | date : 'yyyy' }}</h5>
         <div class="media">
-          <div ng-if="searchresult.poster_path" class="media-left media-middle">
-            <img class="media-object img-thumbnail" ng-src="{{ searchresult.poster_path }}"/>
+          <div ng-if="searchResult.poster_path" class="media-left media-middle">
+            <img class="media-object img-thumbnail" ng-src="{{ searchResult.poster_path }}"/>
           </div>
           <div class="media-body">
             <p class="list-group-item-text">
-              {{ searchresult.summary }}
+              {{ searchResult.summary }}
             </p>
           </div>
           <div style="text-align:right; padding:10px">
-                <button class="btn btn-primary" ng-click="add(searchresult)">Add</button>
+                <button class="btn btn-primary" ng-click="requestItem(searchResult)">Add</button>
           </div>
         </div>
       </li>

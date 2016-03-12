@@ -1,79 +1,83 @@
-plexRequests.controller('RequestController', ['$rootScope', '$scope', '$q', 'searchService', 'requestService',
-    function RequestController($rootScope, $scope, $q, searchService, requestService) {
+plexRequests.controller('RequestController', ['$rootScope', '$scope', 'searchService', 'requestService',
+    function RequestController($rootScope, $scope, searchService, requestService) {
 
-  $scope.searchtype = 'movie';
+  (function init() {
+    $scope.searchType = 'movie';
 
-  $scope.$watch('query', function(query) {
-    refresh(query);
-  });
+    $scope.$watch('query', function(query) {
+      updateSearchResults(query);
+    });
 
-  $scope.$watch('searchtype', function(searchType) {
-    refresh($scope.query);
-  });
+    $scope.$watch('searchType', function(searchType) {
+      updateSearchResults($scope.query);
+    });
 
-  $rootScope.$on('show_item', function(event, request) {
-    $scope.searchtype = request.type;
-    $scope.query = request.name;
-  });
+    $rootScope.$on('showItem', function(event, request) {
+      $scope.searchType = request.type;
+      $scope.query = request.name;
+    });
+  })();
 
-  $scope.setSearchType = function(type) {
-    $scope.searchtype = type;
-  }
+  function setSearchType(type) {
+    $scope.searchType = type;
+  };
 
-  $scope.add = function(searchresult) {
+  function requestItem(searchResult) {
     $scope.loading = true;
-    requestService.request_item(searchresult, function() {
+    requestService.requestItem(searchResult, function() {
       $scope.loading = false;
-      $rootScope.$emit('refresh_needed');
+      $rootScope.$emit('refreshNeeded');
     });
   };
 
-  var refresh = function(query) {
-    cancelRequest();
-    if (!query) {
-      $scope.searchresults = [];
-      return;
-    }
-
-    search(query);
-  },
-
-  search = function(query) {
-    $scope.loading = true;
-    if ($scope.searchtype === 'movie') {
-      searchMovies(query);
+  function updateSearchResults(query) {
+    cancelPreviousRequest();
+    if (query) {
+      $scope.canceler = search(query);
     } else {
-      searchTV(query);
+      $scope.searchResults = [];
     }
-  },
+  };
 
-  searchTV = function(query) {
-    searchService.tvshows(query, $scope.canceller,
-      completeRequest);
-  },
+  function search(query) {
+    $scope.loading = true;
 
-  searchMovies = function(query) {
-    searchService.movies(query, $scope.canceller,
-      completeRequest);
+    if (isSearchType('movie')) {
+      return searchMovies(query);
+    } else {
+      return  searchTV(query);
+    }
+  };
+
+  function searchTV(query) {
+    return searchService.tvshows(query, completeRequest);
+  };
+
+  function searchMovies(query) {
+    return searchService.movies(query, completeRequest);
+  };
+
+  function completeRequest(searchResults) {
+    $scope.loading = false;
+
+    $scope.searchResults = searchResults;
+  };
+
+  function cancelPreviousRequest() {
+    $scope.loading = false;
+
+    if ($scope.canceler) {
+      searchService.cancel($scope.canceler);
+      delete $scope.canceler;
+    }
+  };
+
+  function isSearchType(type) {
+    return $scope.searchType === type;
   }
 
-  postParams = function(searchresult) {
-    return $scope.searchtype == 'movie' ?
-      { movie : searchresult } :
-      { tv_show : searchresult };
-  },
+  $scope.setSearchType = setSearchType;
+  $scope.isSearchType = isSearchType;
+  $scope.requestItem = requestItem;
 
-  completeRequest = function(searchresults) {
-    $scope.loading = false;
-    $scope.searchresults = searchresults;
-  },
-
-  cancelRequest = function() {
-    if($scope.canceller) {
-      $scope.canceller.resolve('user cancelled');
-    }
-
-    $scope.loading = false;
-    $scope.canceller = $q.defer();
-  };
 }]);
