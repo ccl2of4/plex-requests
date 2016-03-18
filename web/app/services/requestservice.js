@@ -1,9 +1,9 @@
-plexRequests.factory('requestService', ['$http', 'envService',
-    function RequestService($http, envService) {
+plexRequests.factory('requestService', ['$http',
+    function RequestService($http) {
 
   function getAll(completion) {
     $http({
-      url : getUrl('/requests'),
+      url : '/requests',
       method : 'GET',
     }).then(function(data) {
       completion(data.data);
@@ -12,7 +12,7 @@ plexRequests.factory('requestService', ['$http', 'envService',
 
   function requestItem(item, completion) {
     $http({
-      url : getUrl('/requests'),
+      url : '/requests',
       method : 'POST',
       data : {item : item}
     }).then(function(response){
@@ -22,17 +22,13 @@ plexRequests.factory('requestService', ['$http', 'envService',
 
   function deleteRequest(item, completion) {
     $http({
-      url : getUrl('/requests/' + item['request_id']),
+      url : '/requests/' + item['request_id'],
       method : 'DELETE',
       data : {item : item},
       headers: {'Content-Type': 'application/json' }
     }).then(function(response){
       completion();
     });
-  };
-
-  function getUrl(endpoint) {
-    return envService.read('apiBaseUrl') + endpoint;
   };
 
   return {
