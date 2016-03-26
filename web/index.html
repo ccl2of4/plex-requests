@@ -1,49 +1,40 @@
 <!doctype html>
 <html ng-app="plexRequests">
-	<head>
-		<title>Plex Requests</title>
+  <head>
+    <title>Plex Requests</title>
 
-		<base href="/web/"/>
+    <base href="/web/"/>
 
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
 
-		<link rel="stylesheet" href="vendor/bootstrap.min.css">
-		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-		<link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
 
-		<script src="bower_components/angular/angular.min.js"></script>
-		<script src="bower_components/angular-resource/angular-resource.min.js"></script>
-		<script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
 
-		<script src="app/app.js"></script>
-		<script src="app/services/searchservice.js"></script>
-		<script src="app/services/requestservice.js"></script>
-		<script src="app/services/commentservice.js"></script>
-		<script src="app/controllers/requestcontroller.js"></script>
-		<script src="app/controllers/editcontroller.js"></script>
+    <script src="app/app.js"></script>
+    <script src="templates.js"></script>
+    <script src="app/services/searchservice.js"></script>
+    <script src="app/services/requestservice.js"></script>
+    <script src="app/services/commentservice.js"></script>
+    <script src="app/controllers/requestcontroller.js"></script>
+    <script src="app/controllers/editcontroller.js"></script>
 
-	</head>
+  </head>
 
-	<body>
+  <body>
 
-		<div class="container">
+    <div class="container">
 
-			<div class="jumbotron">
-				<h1>Plex Requests</h1>
-			</div>
+      <ng-include src="'app/views/nav.html'"></ng-include>
 
-			<div class="row">
+      <div ng-view></div>
 
-			  <div class="col-md-6">
-			    <ng-include src="'app/views/search.html'"></ng-include>
-			  </div>
+    </div>
 
-			  <div class="col-md-6">
-			    <ng-include src="'app/views/existing.html'"></ng-include>
-			  </div>
-
-			</div>
-
-	</body>
+  </body>
 </html>
