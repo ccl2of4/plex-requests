@@ -33,28 +33,4 @@ class Database:
             date integer,
             foreign key (request_id) references requests(request_id) on delete cascade);''')
 
-    def get_requests(self):
-        conn = self.get_conn()
-        query = conn.execute('SELECT * FROM requests')
-        result_list = query.fetchall()
-        for request in result_list:
-            query = conn.execute('SELECT * FROM comments where request_id=? ORDER BY date ASC', (str(request['request_id']),))
-            comment_list = query.fetchall()
-            request['comments'] = comment_list
-        return result_list
-
-    def delete_request(self, request_id):
-        conn = self.get_conn()
-        conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,) )
-
-    def add_request(self, item):
-        conn = self.get_conn()
-        conn.execute('INSERT INTO requests (type, name, date) VALUES (?,?,?)', (item['type'], item['name'], item['date']))
-
-    def add_comment(self, request_id, comment):
-        conn = self.get_conn()
-        conn.execute('INSERT INTO comments (request_id, content, date) VALUES (?,?,CURRENT_TIMESTAMP)', (request_id, comment['content']))
-
-    def delete_comment(self, request_id, comment_id):
-        conn = self.get_conn()
-        conn.execute('DELETE FROM comments WHERE request_id=? AND comment_id=?', (request_id, comment_id))
+db = Database()

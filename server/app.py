@@ -1,20 +1,26 @@
 #!/usr/bin/env python
 
 from flask import url_for
+from flask import Blueprint
 from flask import redirect
 from flask import Flask
 from flask import request
 from flask import jsonify
 from flask import send_file
+from flask_restplus import Resource, Api
+
 import tmdbsimple as tmdb
 from urlresolver import resolve_img_url
 from database import Database
 import json
 
+from apis import blueprint as api
+
 app = Flask(__name__, static_folder='../web', instance_relative_config=True)
 app.config.from_pyfile('plex-requests.cfg')
 tmdb.API_KEY = app.config['API_KEY']
-database = Database()
+
+app.register_blueprint(api, url_prefix='/api')
 
 # Web
 
@@ -26,11 +32,12 @@ def index():
 def redirect_to_index(path):
     return redirect('/')
 
-# Requests
+@app.route('/api/<path:path>')
+def api_index(path):
+    return redirect('/api')
 
-@app.route('/requests', methods=['get'])
-def get_requests():
-    return json.dumps(database.get_requests())
+'''
+# Requests
 
 @app.route('/requests', methods=['post'])
 def add_request():
@@ -95,6 +102,7 @@ def search_tv():
         tv_show['type'] = 'tv_show'
         res['tv_shows'].append(tv_show)
     return jsonify(res)
+'''
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
