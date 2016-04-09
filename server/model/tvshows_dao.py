@@ -1,4 +1,5 @@
 import tmdbsimple as tmdb
+from werkzeug.exceptions import BadRequest
 from .urlresolver import resolve_img_url
 
 class TVShowsDao(object):

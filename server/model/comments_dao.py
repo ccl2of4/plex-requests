@@ -1,4 +1,5 @@
 from database import db
+from werkzeug.exceptions import NotFound
 
 class CommentsDAO(object):
 
@@ -12,7 +13,9 @@ class CommentsDAO(object):
         conn = db.get_conn()
         query = conn.execute('SELECT * FROM comments where request_id=? and comment_id=?', (request_id, comment_id))
         result_list = query.fetchall()
-        return result_list[0] if result_list else None
+        if not result_list:
+            raise NotFound()
+        return result_list[0]
 
     def create(self, request_id, comment):
         conn = db.get_conn()
@@ -21,6 +24,7 @@ class CommentsDAO(object):
     def delete(self, request_id, comment_id):
         conn = db.get_conn()
         query = conn.execute('DELETE FROM comments WHERE request_id=? AND comment_id=?', (request_id, comment_id))
-        return query.rowcount != 0
+        if query.rowcount == 0:
+            raise NotFound()
 
 dao = CommentsDAO()

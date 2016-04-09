@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
-from models.requests_dao import dao
+from model.requests_dao import dao
 
 ns = Namespace('requests', description='Requests operations')
 
@@ -12,7 +12,7 @@ request = ns.model('Request', {
 })
 
 @ns.route('')
-class RequestList(Resource):
+class Requests(Resource):
 
     @ns.marshal_list_with(request)
     def get(self):
@@ -33,10 +33,10 @@ class Request(Resource):
     @ns.marshal_with(request)
     def get(self, request_id):
         '''Fetch a request by id'''
-        request = dao.get(request_id)
-        return request if request else ns.abort(404)
+        return dao.get(request_id)
 
     @ns.response(204, 'Success')
     def delete(self, request_id):
         '''Delete a request by id'''
-        return ('', 204) if dao.delete(request_id) else ns.abort(404)
+        dao.delete(request_id)
+        return ('', 204)

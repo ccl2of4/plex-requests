@@ -1,4 +1,5 @@
 from database import db
+from werkzeug.exceptions import NotFound
 
 class RequestsDAO(object):
 
@@ -15,7 +16,7 @@ class RequestsDAO(object):
         query = conn.execute('SELECT * FROM requests where request_id=?', (request_id,))
         result_list = query.fetchall()
         if not result_list:
-            return None
+            raise NotFound()
         request = result_list[0]
         self._add_comments(request)
         return request
@@ -27,7 +28,8 @@ class RequestsDAO(object):
     def delete(self, request_id):
         conn = db.get_conn()
         query = conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,) )
-        return query.rowcount != 0
+        if query.rowcount == 0:
+            raise NotFound()
 
     def _add_comments(self, request):
         conn = db.get_conn()

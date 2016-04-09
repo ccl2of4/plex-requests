@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
-from models.tvshows_dao import dao
+from werkzeug.exceptions import BadRequest
+from model.tvshows_dao import dao
 
 ns = Namespace('tvshows', description='TV show searches')
 
@@ -17,9 +18,11 @@ tvshow = ns.model('TVShow', {
 class TVShows(Resource):
 
     @ns.marshal_list_with(tvshow)
-    @ns.param('query', _in='query')
+    @ns.param('query', _in='query', required=True)
     @ns.response(400, 'Missing query string')
     def get(self):
         '''Search TV shows'''
         query = r.args.get('query')
-        return dao.search(query) if query else ns.abort(400)
+        if not query:
+            raise BadRequest()
+        return dao.search(query)

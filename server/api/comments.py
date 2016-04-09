@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
-from models.comments_dao import dao
+from model.comments_dao import dao
 
 ns = Namespace('requests/<request_id>/comments', description='Comments operations')
 
@@ -12,7 +12,7 @@ comment = ns.model('Comment', {
 })
 
 @ns.route('')
-class CommentList(Resource):
+class Comments(Resource):
 
     @ns.marshal_list_with(comment)
     def get(self, request_id):
@@ -33,10 +33,10 @@ class Comment(Resource):
     @ns.marshal_with(comment)
     def get(self, request_id, comment_id):
         '''Fetch a comment by id'''
-        comment = dao.get(request_id, comment_id)
-        return comment if comment else ns.abort(404)
+        return dao.get(request_id, comment_id)
 
     @ns.response(204, 'Success')
     def delete(self, request_id, comment_id):
         '''Delete a comment by id'''
-        return ('', 204) if dao.delete(request_id, comment_id) else ns.abort(404)
+        dao.delete(request_id, comment_id)
+        return ('', 204)

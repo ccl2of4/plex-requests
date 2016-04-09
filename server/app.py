@@ -1,9 +1,8 @@
 #!/usr/bin/env python
+import tmdbsimple as tmdb
 from flask import Flask, send_file, redirect
 from flask_restplus import Resource, Api
-import tmdbsimple as tmdb
-
-from apis import blueprint as api
+from api import blueprint as api
 
 app = Flask(__name__, static_folder='../web', instance_relative_config=True)
 app.config.from_pyfile('plex-requests.cfg')
