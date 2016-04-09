@@ -11,7 +11,7 @@ request = ns.model('Request', {
     'type': fields.String(required=True, enum=['movie', 'tv_show'], description='Type of request')
 })
 
-@ns.route('/')
+@ns.route('')
 class RequestList(Resource):
 
     @ns.marshal_list_with(request)

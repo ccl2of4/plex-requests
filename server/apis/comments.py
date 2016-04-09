@@ -11,7 +11,7 @@ comment = ns.model('Comment', {
     'content': fields.String(required=True, description='The content of the comment'),
 })
 
-@ns.route('/')
+@ns.route('')
 class CommentList(Resource):
 
     @ns.marshal_list_with(comment)

@@ -16,7 +16,6 @@ class Database:
         conn = sqlite3.connect('requests.db')
         conn.execute('PRAGMA foreign_keys = ON;')
         conn.row_factory = Database.dict_factory
-        conn.isolation_level = None
         return conn
 
     def create_db(self):

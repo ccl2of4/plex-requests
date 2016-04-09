@@ -23,5 +23,4 @@ class CommentsDAO(object):
         query = conn.execute('DELETE FROM comments WHERE request_id=? AND comment_id=?', (request_id, comment_id))
         return query.rowcount != 0
 
-
 dao = CommentsDAO()

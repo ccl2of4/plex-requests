@@ -1,6 +1,7 @@
 from database import db
 
 class RequestsDAO(object):
+    
     def get_all(self):
         conn = db.get_conn()
         query = conn.execute('SELECT * FROM requests')
