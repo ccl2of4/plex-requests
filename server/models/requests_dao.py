@@ -1,7 +1,7 @@
 from database import db
 
 class RequestsDAO(object):
-    
+
     def get_all(self):
         conn = db.get_conn()
         query = conn.execute('SELECT * FROM requests')
@@ -16,6 +16,7 @@ class RequestsDAO(object):
         result_list = query.fetchall()
         if not result_list:
             return None
+        request = result_list[0]
         self._add_comments(request)
         return request
 
