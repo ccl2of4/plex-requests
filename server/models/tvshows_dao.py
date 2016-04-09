@@ -1,5 +1,5 @@
 import tmdbsimple as tmdb
-from urlresolver import resolve_img_url
+from .urlresolver import resolve_img_url
 
 class TVShowsDao(object):
 
