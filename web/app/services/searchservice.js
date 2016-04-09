@@ -1,15 +1,21 @@
-plexRequests.factory('searchService', ['$http', '$q',
-    function SearchService($http, $q) {
+plexRequests.factory('searchService', ['$http', '$q', 'apiService', 'apiService',
+    function SearchService($http, $q, api) {
+
+  return {
+    movies : movies,
+    tvshows : tvshows,
+    cancel : cancel
+  };
 
   function movies(query, completion) {
     canceler = $q.defer();
     $http({
-      url : '/moviesearch',
+      url : api.buildUrl('/movies'),
       method : 'GET',
       params : {query : query},
       timeout : canceler.promise
     }).then(function(data) {
-      completion(data.data['movies']);
+      completion(data.data);
     });
     return canceler;
   };
@@ -17,24 +23,18 @@ plexRequests.factory('searchService', ['$http', '$q',
   function tvshows(query, completion) {
     canceler = $q.defer();
     $http({
-      url : '/tvsearch',
+      url : api.buildUrl('/tvshows'),
       method : 'GET',
       params : {query : query},
       timeout : canceler.promise
     }).then(function(data) {
-      completion(data.data['tv_shows']);
+      completion(data.data);
     });
     return canceler;
   };
 
   function cancel(canceler) {
     canceler.resolve();
-  }
-
-  return {
-    movies : movies,
-    tvshows : tvshows,
-    cancel : cancel
   };
 
 }]);

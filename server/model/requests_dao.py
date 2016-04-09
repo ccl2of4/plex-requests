@@ -27,7 +27,8 @@ class RequestsDAO(object):
 
     def delete(self, request_id):
         conn = db.get_conn()
-        query = conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,) )
+        query = conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,))
+        print(query.rowcount)
         if query.rowcount == 0:
             raise NotFound()
 

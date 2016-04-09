@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
 from model.requests_dao import dao
+from .comments import comment
 
 ns = Namespace('requests', description='Requests operations')
 
@@ -8,7 +9,8 @@ request = ns.model('Request', {
     'request_id': fields.String(readOnly=True, description="The id of the request"),
     'name': fields.String(required=True, description='The name of the request'),
     'date': fields.String(required=True, description='The release date of the request'),
-    'type': fields.String(required=True, enum=['movie', 'tv_show'], description='Type of request')
+    'type': fields.String(required=True, enum=['movie', 'tv_show'], description='Type of request'),
+    'comments' : fields.List(fields.Nested(comment))
 })
 
 @ns.route('')
