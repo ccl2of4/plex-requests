@@ -18,6 +18,7 @@ class TVShows(Resource):
 
     @ns.marshal_list_with(tvshow)
     @ns.param('query', _in='query')
+    @ns.response(400, 'Missing query string')
     def get(self):
         '''Search TV shows'''
         query = r.args.get('query')
