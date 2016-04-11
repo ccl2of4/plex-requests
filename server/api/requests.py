@@ -1,7 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
-from model.requests_dao import dao
 from .comments import comment
+from model.requests_dao import dao
 
 ns = Namespace('requests', description='Requests operations')
 
@@ -19,7 +19,7 @@ class Requests(Resource):
     @ns.marshal_list_with(request)
     def get(self):
         '''List all requests'''
-        return dao.get_all()
+        return dao.get_all(nest_comments=True)
 
     @ns.expect(request)
     @ns.response(201, 'Success')
@@ -35,7 +35,7 @@ class Request(Resource):
     @ns.marshal_with(request)
     def get(self, request_id):
         '''Fetch a request by id'''
-        return dao.get(request_id)
+        return dao.get(request_id, nest_comments=True) or ns.abort(404)
 
     @ns.response(204, 'Success')
     def delete(self, request_id):

@@ -1,41 +1,42 @@
 from database import db
 from werkzeug.exceptions import NotFound
 
+@db.transactions
 class RequestsDAO(object):
 
-    def get_all(self):
-        conn = db.get_conn()
-        query = conn.execute('SELECT * FROM requests')
+    def get_all(self, **kwargs):
+        query = db.execute('SELECT * FROM requests')
         result_list = query.fetchall()
-        for request in result_list:
-            self._add_comments(request)
-        return result_list
+        return self._post_process(result_list, **kwargs)
 
-    def get(self, request_id):
-        conn = db.get_conn()
-        query = conn.execute('SELECT * FROM requests where request_id=?', (request_id,))
-        result_list = query.fetchall()
-        if not result_list:
-            raise NotFound()
-        request = result_list[0]
-        self._add_comments(request)
-        return request
+    def get(self, request_id, **kwargs):
+        query = db.execute('SELECT * FROM requests where request_id=?', (request_id,))
+        result = query.fetchone()
+        if not result:
+            raise NotFound('No request exists for id ' + request_id)
+        return self._post_process(result, **kwargs)
 
     def create(self, request):
-        conn = db.get_conn()
-        conn.execute('INSERT INTO requests (type, name, date) VALUES (?,?,?)', (request['type'], request['name'], request['date']))
+        db.execute('INSERT INTO requests (type, name, date) VALUES (?,?,?)', (request['type'], request['name'], request['date']))
 
     def delete(self, request_id):
-        conn = db.get_conn()
-        query = conn.execute('DELETE FROM requests WHERE request_id=?', (request_id,))
-        print(query.rowcount)
-        if query.rowcount == 0:
-            raise NotFound()
+        self.check_exists(request_id)
+        query = db.execute('DELETE FROM requests WHERE request_id=?', (request_id,))
 
-    def _add_comments(self, request):
-        conn = db.get_conn()
-        query = conn.execute('SELECT * FROM comments where request_id=? ORDER BY date ASC', (str(request['request_id']),))
-        comment_list = query.fetchall()
-        request['comments'] = comment_list
+    def check_exists(self, request_id):
+        return self.get(request_id)
+
+    def _post_process(self, requests, nest_comments=False):
+        if not nest_comments:
+            return requests
+        if not hasattr(requests, '__iter__'):
+            requests = (requests,)
+        return [self._nest_comments(r) for r in requests]
+
+    def _nest_comments(self, request):
+        request['comments'] = comments.get_all(request['request_id'])
+        return request
 
 dao = RequestsDAO()
+
+from model.comments_dao import dao as comments
