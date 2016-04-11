@@ -33,7 +33,7 @@ class Comment(Resource):
     @ns.marshal_with(comment)
     def get(self, request_id, comment_id):
         '''Fetch a comment by id'''
-        return dao.get(request_id, comment_id) or ns.abort(404)
+        return dao.get(request_id, comment_id)
 
     @ns.response(204, 'Success')
     def delete(self, request_id, comment_id):

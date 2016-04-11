@@ -14,7 +14,7 @@ class RequestsDAO(object):
         result = query.fetchone()
         if not result:
             raise NotFound('No request exists for id ' + request_id)
-        return self._post_process(result, **kwargs)
+        return self._post_process((result,), **kwargs)
 
     def create(self, request):
         db.execute('INSERT INTO requests (type, name, date) VALUES (?,?,?)', (request['type'], request['name'], request['date']))
@@ -29,8 +29,6 @@ class RequestsDAO(object):
     def _post_process(self, requests, nest_comments=False):
         if not nest_comments:
             return requests
-        if not hasattr(requests, '__iter__'):
-            requests = (requests,)
         return [self._nest_comments(r) for r in requests]
 
     def _nest_comments(self, request):

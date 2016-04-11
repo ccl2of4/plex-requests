@@ -35,7 +35,7 @@ class Request(Resource):
     @ns.marshal_with(request)
     def get(self, request_id):
         '''Fetch a request by id'''
-        return dao.get(request_id, nest_comments=True) or ns.abort(404)
+        return dao.get(request_id, nest_comments=True)
 
     @ns.response(204, 'Success')
     def delete(self, request_id):
