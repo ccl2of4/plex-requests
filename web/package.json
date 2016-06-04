@@ -1,9 +1,0 @@
-{
-  "name": "plex-requests",
-  "version": "0.0.0",
-  "description": "Web client for plex-requests",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-angular-templates": "^1.0.3"
-  }
-}

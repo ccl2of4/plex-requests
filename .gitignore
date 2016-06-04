@@ -4,11 +4,6 @@ instance/
 #sqlite db file
 *.db
 
-#bower/node/grunt
-bower_components
-node_modules
-templates.js
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
