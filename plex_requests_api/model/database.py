@@ -71,21 +71,19 @@ class Database(object):
 
 db = Database()
 
-@db.transaction
-def create_db(self):
-    db.conn.execute('''
+db._conn.executescript('''
 
-        CREATE TABLE IF NOT EXISTS requests (
-        request_id integer primary key,
-        type text,
-        name text,
-        date text );
+    CREATE TABLE IF NOT EXISTS requests (
+    request_id integer primary key,
+    type text,
+    name text,
+    date text );
 
-        CREATE TABLE IF NOT EXISTS comments (
-        comment_id integer primary key,
-        request_id integer,
-        content text,
-        date integer,
-        foreign key (request_id) references requests(request_id) on delete cascade);
+    CREATE TABLE IF NOT EXISTS comments (
+    comment_id integer primary key,
+    request_id integer,
+    content text,
+    date integer,
+    foreign key (request_id) references requests(request_id) on delete cascade);
 
-        ''')
+    ''')
