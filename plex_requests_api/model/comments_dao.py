@@ -1,4 +1,4 @@
-from database import db
+from .database import db
 from werkzeug.exceptions import NotFound
 
 @db.transactions

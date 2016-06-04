@@ -1,7 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
 from .comments import comment
-from model.requests_dao import dao
+from ..model.requests_dao import dao
 
 ns = Namespace('requests', description='Requests operations')
 

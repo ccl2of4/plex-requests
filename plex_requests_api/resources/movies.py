@@ -1,7 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
 from werkzeug.exceptions import BadRequest
-from model.movies_dao import dao
+from ..model.movies_dao import dao
 
 ns = Namespace('movies', description='Movie searches')
 

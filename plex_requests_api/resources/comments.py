@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
-from model.comments_dao import dao
+from ..model.comments_dao import dao
 
 ns = Namespace('requests/<request_id>/comments', description='Comments operations')
 

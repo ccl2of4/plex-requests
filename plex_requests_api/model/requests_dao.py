@@ -1,4 +1,4 @@
-from database import db
+from .database import db
 from werkzeug.exceptions import NotFound
 
 @db.transactions
@@ -37,4 +37,4 @@ class RequestsDAO(object):
 
 dao = RequestsDAO()
 
-from model.comments_dao import dao as comments
+from .comments_dao import dao as comments
