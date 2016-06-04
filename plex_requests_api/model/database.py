@@ -1,5 +1,6 @@
 import sqlite3
 import threading
+from ..config import config
 
 class Database(object):
 
@@ -36,7 +37,7 @@ class Database(object):
     @property
     def _conn(self):
         if not self._threadinfo.conn:
-            conn = sqlite3.connect('requests.db')
+            conn = sqlite3.connect(config['DB_PATH'])
             conn.execute('PRAGMA foreign_keys = ON;')
             conn.row_factory = Database._dict_factory
             self._threadinfo.conn = conn
