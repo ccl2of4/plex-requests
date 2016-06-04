@@ -46,4 +46,4 @@ To run tests, first make sure your server is running. Then cd into the tests dir
 
 ## Swagger
 
-If the app is run locally using default configuration the Swagger GUI will be visible at http://localhost:5000/api
+If the app is run locally using default configuration the Swagger GUI will be visible at [http://localhost:5000/api]
