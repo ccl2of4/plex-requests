@@ -6,6 +6,7 @@ from .resources.requests import ns as requests_ns
 from .resources.comments import ns as comments_ns
 from .resources.movies import ns as movies_ns
 from .resources.tvshows import ns as tvshows_ns
+from .model.database import db
 
 app = Flask(__name__,
     static_url_path = '',
@@ -29,7 +30,24 @@ tmdb.API_KEY = config['TMDB_API_KEY']
 def index():
     return redirect('/index.html')
 
+def init_db():
+    with app.app_context():
+        db.initialize()
+
+def drop_db():
+    with app.app_context():
+        db.drop_all()
+
+if config['DEBUG']:
+    @app.route('/api/drop_db', methods=['DELETE'])
+    def drop_db_endpoint():
+        drop_db()
+        return ('', 204)
+
+
 def run():
+    init_db()
+
     app.run(
         host     = '0.0.0.0',
         port     = config['PORT'],

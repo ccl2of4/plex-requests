@@ -1,41 +1,43 @@
-from types import MethodType
-from json import dumps, loads
-from ..model.database import db
-from ..config import config
-from .. import app
+from utils.fixtures import *
+from utils.urls import *
+from .test_api import TestAPI
 
-client = None
+class TestRequests(TestAPI):
 
-def minimal_request():
-    return {'name': 'some request', 'date': '10/26/2014', 'type': 'tv_show'}
+    def test_create(self):
+        r = self.client.post(url=requests_url(), json=minimal_request())
+        assert r.status_code == 201
 
-def minimal_comment():
-    return {'content': 'i am a comment'}
+    def test_get_all_empty(self):
+        r = self.client.get(requests_url())
+        assert r.status_code == 200
+        assert len(r.json) == 0
 
-def setup_function(function):
-    db._conn.executescript('DELETE FROM requests WHERE 1')
+    def test_get_all_after_create(self):
+        self.test_create()
+        r = self.client.get(requests_url())
+        assert r.status_code == 200
+        assert len(r.json) == 1
 
-    global client
-    app.config['TESTING'] = True
-    client = app.test_client()
+    def test_delete(self):
+        self.test_create()
+        r = self.client.get(requests_url())
+        request_id = r.json[0]['request_id']
+        r = self.client.delete(request_url(request_id))
+        assert r.status_code == 204
+        self.test_get_all_empty()
 
-def post_json(client, url, json):
-    return client.post(url, data=dumps(json), content_type='application/json')
+    def test_delete_404(self):
+        r = self.client.delete(request_url('lol'))
+        assert r.status_code == 404
 
-def json(r):
-    return loads(r.data.decode('utf-8'))
+    def test_get_after_create(self):
+        self.test_create()
+        r = self.client.get(requests_url())
+        request_id = r.json[0]['request_id']
+        r = self.client.get(request_url(request_id))
+        assert r.status_code == 200
 
-def test_create():
-    r = post_json(client, '/api/requests', minimal_request())
-    assert r.status_code == 201
-
-def test_get_all_empty():
-    r = client.get('/api/requests')
-    assert r.status_code == 200
-    assert len(json(r)) == 0
-
-def test_get_all_after_create():
-    test_create()
-    r = client.get('/api/requests')
-    assert r.status_code == 200
-    assert len(json(r)) == 1
+    def test_get_404(self):
+        r = self.client.get(request_url('lol'))
+        assert r.status_code == 404

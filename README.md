@@ -41,13 +41,17 @@ Alternatively, run using python
 
 ## Running functional tests
 
-To run the functional tests, first configure the server to use the same database
-that the tests will be using. Each test wipes the database before running. Then
-run the server
+To run the functional tests, make sure the server is in DEBUG mode. When in DEBUG
+mode, the server exposes an extra endpoint 'drop_db' that deletes all data from
+the sqlite database.
 
-* Set db environment variable for both server and tests `export DB_PATH='test_requests.db'`
+* Optionally configure db environment variable for server `export DB_PATH='test_requests.db'`
 * Run all tests `py.test functional_tests`
 * Run single test `py.test functional_tests/[test_name.py]`
+
+## Running unit tests
+
+Simply run `py.test plex_requests_api`
 
 ## Swagger
 

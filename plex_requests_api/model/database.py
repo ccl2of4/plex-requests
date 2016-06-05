@@ -1,12 +1,11 @@
 import sqlite3
-import threading
+from flask import g
 from ..config import config
 
 class Database(object):
 
-    def __init__(self, db_path):
-        self._db_path = db_path
-        self._threadlocal = threading.local()
+    def initialize(self):
+        '''Must be called before executing any scripts'''
         self._init_tables()
 
     def transactions(self, cls):
@@ -36,8 +35,13 @@ class Database(object):
     def execute(self, *args, **kwargs):
         return self._conn.execute(*args, **kwargs)
 
+    def drop_all(self):
+        self.execute('DELETE FROM requests WHERE 1')
+        self._conn.commit()
+
     def _init_tables(self):
         self._conn.executescript('''
+
             CREATE TABLE IF NOT EXISTS requests (
             request_id integer primary key,
             type text,
@@ -50,30 +54,29 @@ class Database(object):
             content text,
             date integer,
             foreign key (request_id) references requests(request_id) on delete cascade);
+
             ''')
 
     @property
     def _conn(self):
-        if not self._threadinfo.conn:
-            conn = sqlite3.connect(self._db_path)
+        conn = getattr(g, '_conn', None)
+        if conn is None:
+            conn = sqlite3.connect(config['DB_PATH'])
             conn.execute('PRAGMA foreign_keys = ON;')
             conn.row_factory = Database._dict_factory
-            self._threadinfo.conn = conn
-        return self._threadinfo.conn
+            g._conn = conn
+        return conn
 
     @property
     def _transaction_level(self):
-        return self._threadinfo.transaction_level
+        transaction_level = getattr(g, '_transaction_level', None)
+        if transaction_level is None:
+            transaction_level = g._transaction_level = 0
+        return transaction_level
 
     @_transaction_level.setter
     def _transaction_level(self, value):
-        self._threadinfo.transaction_level = value
-
-    @property
-    def _threadinfo(self):
-        if not hasattr(self._threadlocal, 'threadinfo'):
-            self._threadlocal.threadinfo = Database.ThreadInfo()
-        return self._threadlocal.threadinfo
+        g.transaction_level = value
 
     @staticmethod
     def _dict_factory(cursor, row):
@@ -82,9 +85,4 @@ class Database(object):
             d[col[0]] = row[idx]
         return d
 
-    class ThreadInfo(object):
-        def __init__(self):
-            self.conn = None
-            self.transaction_level = 0
-
-db = Database(config['DB_PATH'])
+db = Database()

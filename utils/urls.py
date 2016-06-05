@@ -1,4 +1,11 @@
-from ..config import config
+base_url = '/api'
+
+def set_base_url(api_base_url):
+    global base_url
+    base_url = api_base_url
+
+def drop_url():
+    return url('/drop_db')
 
 def requests_url():
     return url('/requests')
@@ -13,5 +20,4 @@ def comment_url(request_id, comment_id):
     return '{0}/{1}'.format(comments_url(request_id), comment_id)
 
 def url(endpoint):
-    base_url = config['API_BASE_URL']
     return '{0}{1}'.format(base_url, endpoint)
