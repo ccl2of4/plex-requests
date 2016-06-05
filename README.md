@@ -1,5 +1,7 @@
 # Plex Requests API
 
+[![Build Status](https://travis-ci.org/ccl2of4/plex-requests-api.png)](https://travis-ci.org/ccl2of4/plex-requests-api)
+
 ## Setting up virtualenv
 
 1) Install virtualenv
