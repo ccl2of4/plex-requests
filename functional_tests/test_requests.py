@@ -2,10 +2,10 @@ import requests
 from plex_requests_api.model.database import db
 from .support.urls import *
 from .support.fixtures import *
+from .support.database import drop_all
 
-@db.transaction
 def setup_function(function):
-    db._conn.execute('DELETE FROM requests WHERE 1')
+    drop_all()
 
 def test_create():
     r = requests.post(requests_url(), json=minimal_request())

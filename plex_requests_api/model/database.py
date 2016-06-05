@@ -4,8 +4,10 @@ from ..config import config
 
 class Database(object):
 
-    def __init__(self):
+    def __init__(self, db_path):
+        self._db_path = db_path
         self._threadlocal = threading.local()
+        self._init_tables()
 
     def transactions(self, cls):
         for attr in cls.__dict__:
@@ -34,10 +36,26 @@ class Database(object):
     def execute(self, *args, **kwargs):
         return self._conn.execute(*args, **kwargs)
 
+    def _init_tables(self):
+        self._conn.executescript('''
+            CREATE TABLE IF NOT EXISTS requests (
+            request_id integer primary key,
+            type text,
+            name text,
+            date text );
+
+            CREATE TABLE IF NOT EXISTS comments (
+            comment_id integer primary key,
+            request_id integer,
+            content text,
+            date integer,
+            foreign key (request_id) references requests(request_id) on delete cascade);
+            ''')
+
     @property
     def _conn(self):
         if not self._threadinfo.conn:
-            conn = sqlite3.connect(config['DB_PATH'])
+            conn = sqlite3.connect(self._db_path)
             conn.execute('PRAGMA foreign_keys = ON;')
             conn.row_factory = Database._dict_factory
             self._threadinfo.conn = conn
@@ -69,21 +87,4 @@ class Database(object):
             self.conn = None
             self.transaction_level = 0
 
-db = Database()
-
-db._conn.executescript('''
-
-    CREATE TABLE IF NOT EXISTS requests (
-    request_id integer primary key,
-    type text,
-    name text,
-    date text );
-
-    CREATE TABLE IF NOT EXISTS comments (
-    comment_id integer primary key,
-    request_id integer,
-    content text,
-    date integer,
-    foreign key (request_id) references requests(request_id) on delete cascade);
-
-    ''')
+db = Database(config['DB_PATH'])

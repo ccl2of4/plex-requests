@@ -1,7 +1,7 @@
 import requests
-from plex_requests_api.model.database import db
 from .support.urls import *
 from .support.fixtures import *
+from .support.database import drop_all
 
 request_id = ''
 
@@ -12,10 +12,6 @@ def setup_function(function):
     r = requests.post(requests_url(), json=minimal_request())
     r = requests.get(requests_url())
     request_id = r.json()[0]['request_id']
-
-@db.transaction
-def drop_all():
-    db._conn.execute('DELETE FROM requests WHERE 1')
 
 def test_create():
     r = requests.post(comments_url(request_id), json=minimal_comment())

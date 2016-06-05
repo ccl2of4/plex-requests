@@ -1,4 +1,4 @@
-from plex_requests_api.config import config
+from ..config import config
 
 def requests_url():
     return url('/requests')
