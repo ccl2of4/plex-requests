@@ -37,12 +37,15 @@ Run the script as an executable
 Alternatively, run using python
   * `python run.py`
 
-## Running tests
+## Running functional tests
 
-To run tests, first make sure your server is running. Then cd into the tests directory.
+To run the functional tests, first configure the server to use the same database
+that the tests will be using. Each test wipes the database before running. Then
+run the server
 
-* Run all tests `py.test .`
-* Run single test `py.test [test_name.py]`
+* Set db environment variable for both server and tests `export DB_PATH='test_requests.db'`
+* Run all tests `py.test functional_tests`
+* Run single test `py.test functional_tests/[test_name.py]`
 
 ## Swagger
 
