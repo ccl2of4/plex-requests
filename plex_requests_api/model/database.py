@@ -5,8 +5,9 @@ from ..config import config
 class Database(object):
 
     def initialize(self):
-        '''Must be called before executing any scripts'''
-        self._init_tables()
+        with open(config['SCHEMA_PATH']) as schema_file:
+            schema = schema_file.read()
+            self.executescript(schema)
 
     def transactions(self, cls):
         for attr in cls.__dict__:
@@ -35,27 +36,11 @@ class Database(object):
     def execute(self, *args, **kwargs):
         return self._conn.execute(*args, **kwargs)
 
-    def drop_all(self):
-        self.execute('DELETE FROM requests WHERE 1')
-        self._conn.commit()
+    def executescript(self, *args, **kwargs):
+        return self._conn.executescript(*args, **kwargs)
 
-    def _init_tables(self):
-        self._conn.executescript('''
-
-            CREATE TABLE IF NOT EXISTS requests (
-            request_id integer primary key,
-            type text,
-            name text,
-            date text );
-
-            CREATE TABLE IF NOT EXISTS comments (
-            comment_id integer primary key,
-            request_id integer,
-            content text,
-            date integer,
-            foreign key (request_id) references requests(request_id) on delete cascade);
-
-            ''')
+    def commit(self):
+        return self._conn.commit()
 
     @property
     def _conn(self):

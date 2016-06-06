@@ -41,11 +41,10 @@ Alternatively, run using python
 
 ## Running functional tests
 
-To run the functional tests, make sure the server is in DEBUG mode. When in DEBUG
-mode, the server exposes an extra endpoint 'drop_db' that deletes all data from
-the sqlite database.
+To run the functional tests, make sure the server and the tests are configured
+to use the same DB file. The DB is wiped between every test.
 
-* Optionally configure db environment variable for server `export DB_PATH='test_requests.db'`
+* Configure db environment variable for server `export DB_PATH='test_requests.db'`
 * Run all tests `py.test functional_tests`
 * Run single test `py.test functional_tests/[test_name.py]`
 

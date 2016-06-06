@@ -1,4 +1,6 @@
 import requests
+import sqlite3
+import os
 from utils.urls import *
 from utils.fixtures import *
 from .config import config
@@ -6,10 +8,19 @@ from .config import config
 class TestAPI(object):
     '''Base class to be extended for functional tests'''
 
-    def setup_method(self, method):
-        set_base_url(config['API_BASE_URL'])
-        requests.delete(drop_url())
-
     @classmethod
-    def teardown_class(cls):
-        requests.delete(drop_url())
+    def setup_class(cls):
+        set_base_url(config['API_BASE_URL'])
+
+    def setup_method(self, method):
+        self.drop_all()
+
+    def teardown_method(self, method):
+        self.drop_all()
+
+    def drop_all(self):
+        conn = sqlite3.connect(config['DB_PATH'])
+        # Foreign keys enabled for cascade delete of all data
+        conn.execute('PRAGMA foreign_keys = ON;')
+        conn.execute('DELETE FROM requests WHERE 1')
+        conn.commit()

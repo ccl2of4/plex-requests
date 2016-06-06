@@ -1,7 +1,8 @@
 import os
 import tempfile
 from ..config import config
-from .. import app, init_db, drop_db
+from ..model.database import db
+from .. import app
 from .apiutils import Client
 
 class TestAPI(object):
@@ -15,8 +16,10 @@ class TestAPI(object):
         self.client = Client(app)
 
         # Initialize and delete all data from database
-        init_db()
-        drop_db()
+        with app.app_context():
+            db.initialize()
+            db.execute('DELETE FROM requests WHERE 1')
+            db.commit()
 
     def teardown_method(self, method):
         os.close(self.db_fd)

@@ -1,3 +1,4 @@
+import os
 import tmdbsimple as tmdb
 from flask import Flask, Blueprint, send_file, redirect
 from flask_restplus import Resource, Api
@@ -30,23 +31,9 @@ tmdb.API_KEY = config['TMDB_API_KEY']
 def index():
     return redirect('/index.html')
 
-def init_db():
+def run():
     with app.app_context():
         db.initialize()
-
-def drop_db():
-    with app.app_context():
-        db.drop_all()
-
-if config['DEBUG']:
-    @app.route('/api/drop_db', methods=['DELETE'])
-    def drop_db_endpoint():
-        drop_db()
-        return ('', 204)
-
-
-def run():
-    init_db()
 
     app.run(
         host     = '0.0.0.0',
