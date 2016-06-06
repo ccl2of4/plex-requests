@@ -1,7 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from flask import request as r
 from werkzeug.exceptions import BadRequest
-from ..model.movies_dao import dao
+from ..service.tmdb import tmdb
 
 ns = Namespace('movies', description='Movie searches')
 
@@ -25,4 +25,4 @@ class Movies(Resource):
         query = r.args.get('query')
         if not query:
             raise BadRequest()
-        return dao.search(query)
+        return tmdb.search_movies(query)

@@ -25,8 +25,6 @@ api.add_namespace(tvshows_ns)
 
 app.register_blueprint(blueprint, url_prefix='/api')
 
-tmdb.API_KEY = config['TMDB_API_KEY']
-
 @app.route('/')
 def index():
     return redirect('/index.html')
