@@ -1,8 +1,8 @@
 import requests
 import sqlite3
 import os
-from utils.urls import *
-from utils.fixtures import *
+from tests.utils.urls import *
+from tests.utils.fixtures import *
 from .config import config
 
 class TestAPI(object):

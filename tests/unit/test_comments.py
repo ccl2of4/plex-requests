@@ -1,5 +1,5 @@
-from utils.fixtures import *
-from utils.urls import *
+from tests.utils.fixtures import *
+from tests.utils.urls import *
 from .test_api import TestAPI
 
 class TestComments(TestAPI):

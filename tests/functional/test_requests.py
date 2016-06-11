@@ -1,7 +1,7 @@
 import requests
 from plex_requests_api.model.database import db
-from utils.urls import *
-from utils.fixtures import *
+from tests.utils.urls import *
+from tests.utils.fixtures import *
 from .config import config
 from .test_api import TestAPI
 

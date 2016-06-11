@@ -1,8 +1,8 @@
 import os
 import tempfile
-from ..config import config
-from ..model.database import db
-from .. import app
+from plex_requests_api.config import config
+from plex_requests_api.model.database import db
+from plex_requests_api import app
 from .apiutils import Client
 
 class TestAPI(object):

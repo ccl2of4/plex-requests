@@ -45,8 +45,7 @@ To run the functional tests, make sure the server and the tests are configured
 to use the same DB file. The DB is wiped between every test.
 
 * Configure db environment variable for server `export DB_PATH='test_requests.db'`
-* Run all tests `py.test functional_tests`
-* Run single test `py.test functional_tests/[test_name.py]`
+* Run functional tests `py.test tests/functional`
 
 ## Running unit tests
 

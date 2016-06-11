@@ -1,11 +1,15 @@
+import os
 import sqlite3
 from flask import g
 from ..config import config
 
+dirname = os.path.dirname(__file__)
+schema_path = os.path.join(dirname, 'schema.sql')
+
 class Database(object):
 
     def initialize(self):
-        with open(config['SCHEMA_PATH']) as schema_file:
+        with open(schema_path) as schema_file:
             schema = schema_file.read()
             self.executescript(schema)
 
