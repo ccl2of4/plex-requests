@@ -28,7 +28,7 @@ If you need to add a dependency, the easiest way to do that is
 ## Configuration
 
 The following environment variable is required to run the app:
-  * `TMDB_API_KEY`: API key for [themoviedb](https://www.themoviedb.org/)
+  * `TMDB_API_KEY`: API key for [TMDb](https://www.themoviedb.org/)
 
 See config.py for additional optional configuration
 
@@ -36,6 +36,7 @@ See config.py for additional optional configuration
 
 Run the script as an executable
   * `./run.py`
+
 Alternatively, run using python
   * `python run.py`
 
