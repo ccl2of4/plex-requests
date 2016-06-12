@@ -50,7 +50,7 @@ to use the same DB file. The DB is wiped between every test.
 
 ## Running unit tests
 
-Simply run `py.test plex_requests_api`
+Simply run `py.test tests/unit`
 
 ## Swagger
 
